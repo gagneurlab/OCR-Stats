@@ -1,25 +1,11 @@
 # OCR-Stats
 
-Goals:
-
-* Setup pipeline from Kremer, Bader paper.
-* Plug and Play for new RNA samples
-    * using aberrant expression pkg
-    * using splicing pkg
-    * develop MAE functions/pkg
-* extend  pipeline by proteomics
-
-## Method described in: [Paper](https://i12g-gagneurweb.in.tum.de/project/genetic_diagnosis/)
-
-
+Contains functions to estimate oxygen consumption rates using the Seahorse XF Analyzer. Includes plotting functions as well.
+Method described in: [Paper](https://i12g-gagneurweb.in.tum.de/project/genetic_diagnosis/)
 
 
 ## Installing requirements
-
-
 ### R
-
-Normal R packages
 
 ```{r}
 install.packages("data.table")
