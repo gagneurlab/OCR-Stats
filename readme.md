@@ -31,7 +31,8 @@ All data located in `data/`.
 
 ## Main functions explained
 
-- ``
+- `add_outlier_col()`: adds 2 T/F columns (is.outw and is.out) to the given dataset indicating if the OCR value is a well level or single point outlier.
+- `compute_bionergetics()`: computes all four OCR interval levels in natural and logarithmic scales. Also provides bioenergetics in the natural scale (maximal respiration) and in the logarithmic scale (M/Ei ratio)
 
 
 ## Support
