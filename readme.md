@@ -2,8 +2,6 @@
 
 Contains functions to estimate oxygen consumption rates using the Seahorse XF Analyzer. Includes plotting functions as well.
 
-Method described in: [Paper](https://)
-
 
 ## Installing requirements
 ### R
