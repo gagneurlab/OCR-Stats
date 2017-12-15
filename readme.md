@@ -1,7 +1,7 @@
 # OCR-Stats
 
 Contains functions to estimate oxygen consumption rates using the Seahorse XF Analyzer. Includes plotting functions as well.
-Manuscript in [bioRxiv](https://www.biorxiv.org/content/early/2017/12/13/231522)
+Manuscript in [bioRxiv](https://www.biorxiv.org/content/early/2017/12/13/231522).
 
 ## Installing requirements
 ### R
