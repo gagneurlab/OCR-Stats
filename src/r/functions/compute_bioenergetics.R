@@ -1,5 +1,4 @@
 # Needs: get_int_levels() and fit_function()
-# Outlier columns should have been added beforehand
 source('src/r/functions/fit_function.R')
 
 compute_bioenergetics = function(DT, methods, Out_co = 5, Out_cop = 7, 
@@ -7,8 +6,9 @@ compute_bioenergetics = function(DT, methods, Out_co = 5, Out_cop = 7,
   
   # DT = data; methods = c("LR", "RR", "LR_ao")
   l_fits = l_ints = w_fits = list()
-  ints_dt = w_fit_dt = data.table()
+  ints_dt = data.table()
   
+  # Compute the well-wise fit and then obtain one value per sample per plate
   for(m in methods){
     l_fits[[m]] = fit_function(DT, Method = m,  Out_co = 5, Out_cop = 7, group1 = group1, group2 = group2, offset = offset)
     l_ints[[m]] = get_int_levels(l_fits[[m]]$fitted, group1 = group1, group2 = group2)

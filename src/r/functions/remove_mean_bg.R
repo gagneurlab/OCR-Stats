@@ -18,10 +18,8 @@ remove_mean_bg = function(v, NT){
   for(i in 1:NT){
     for(j in 0:95){
       v[i+j*NT] = v[i+j*NT] - mean_corners[i]
-      if(v[i+j*NT] <= 0){            # Discard OCR<=0 & OCR>800 (OCR_MAX)
+      if(v[i+j*NT] <= 0 | v[i+j*NT] > OCR_MAX){ # Discard OCR<=0 & OCR>800 (OCR_MAX)
         v[i+j*NT] = NA 
-      }else if(v[i+j*NT] > OCR_MAX){
-        v[i+j*NT] = NA
       }
     }
     # assign NA to the corners

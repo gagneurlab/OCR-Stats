@@ -9,7 +9,22 @@
 
 stat_test_OCR <- function(bio_dt, comp_dt, vars = c("EI", "AI", "EAi", "MI", "MEi")){
   
-  comp_dt <- left_join(comp_dt, unique(dt_ao[,.(cell_culture, Fibroblast_id)]), by = c("s1" = "cell_culture"))
+  # comp_dt must have 2 columns only
+  if(ncol(comp_dt) != 2)
+    stop("comp_dt must have 2 columns only")
+  
+  colnames(comp_dt) <- c("s1", "s2")
+  
+  
+  comp_samples <- union(comp_dt$s1, comp_dt$s2)
+  if(!all(comp_samples %in% unique(bio_dt$cell_culture))){
+    warning(
+      paste0("The following samples appear in the comp_dt, but not in the results table: ", 
+             paste(comp_samples[! comp_samples %in% bio_dt$cell_culture], collapse = ", "))
+    )}
+  
+  
+  comp_dt <- left_join(comp_dt, unique(bio_dt[, .(cell_culture, Fibroblast_id)]), by = c("s1" = "cell_culture"))
   
   l = lapply(vars, function(var) {
     ct <- left_join(comp_dt, bio_dt[, c("cell_culture", var), with = F], by = c("s1" = "cell_culture"))
@@ -23,14 +38,23 @@ stat_test_OCR <- function(bio_dt, comp_dt, vars = c("EI", "AI", "EAi", "MI", "ME
   
   l2 <- lapply(vars, function(var){
     fit = lm(dif ~ 0 + Fibroblast_id, data = dif_dt[id == var])
+    
+    dof = fit$df.residual
+    if(dof == 0){
+      message("No plate replicates. It is not possible to compute p values.")
+    } else if (dof < 10){
+      message(paste0("Only ", dof, " plate replicates. P values computed, but more samples are recommended."))
+    } else{
+      message(paste0(dof, " plate replicates. Enough to get confident p values."))
+    }
     # summary(fit)
+    
     coef = summary(fit)$coefficients %>% as.data.table
     coef[, Fibroblast_id := row.names(summary(fit)$coefficients)]
     coef[, Fibroblast_id := gsub("Fibroblast_id", "", Fibroblast_id)]
     colnames(coef)[4] = "pv"
     return(coef)
-  }
-  )
+  })
   names(l2) = vars
   pv_dt = rbindlist(l2, idcol = "id")
   

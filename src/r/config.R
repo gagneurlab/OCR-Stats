@@ -6,6 +6,7 @@ library(data.table)
 library(magrittr)
 library(dplyr)
 library(ggplot2)
+library(plotly)
 library(tidyr)
 
 # Different functions needed

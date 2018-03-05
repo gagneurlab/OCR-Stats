@@ -1,12 +1,12 @@
 source('src/r/plots/ggplot_functions.R')
 
-sh_plot <- function(plot_dt, bw = TRUE, add_title = TRUE, see_out = FALSE, y = "OCR", group = "Fibroblast_id", geom = "point"){
+sh_plot <- function(plot_dt, add_title = TRUE, see_out = FALSE, y = "OCR", group = "Fibroblast_id", geom = "point"){
   
   # Other option for geom: box or line
   if(geom == "line") group <- "well"
   
   pt <- if.else("cell_culture" %in% names(plot_dt), plot_dt[!is.na(cell_culture)],
-               plot_dt)
+                plot_dt)
   
   # Create ggobject
   if(geom == "point"){
@@ -29,10 +29,9 @@ sh_plot <- function(plot_dt, bw = TRUE, add_title = TRUE, see_out = FALSE, y = "
   if(add_title == T)
     g = g + ggtitle(unique(pt$plate_id))
   
-  g <- if.else(bw == T, add_theme_bw(g, legend_pos ="right"),
-               increase_labs_ggplot(g))
+  g = g + theme_bw(base_size = 14)
   
-  g = g + scale_colour_discrete(name = group)
+  g = g + scale_color_ptol(name = group)  # name attribute gives name to legend
   g
 }
 
@@ -76,8 +75,19 @@ outlier_plot = function(DT, cc, add_out = T, group = "cell_culture"){
   if(sum(plot_dt$is.out) != 0 & add_out == T){
     p = p + geom_point(aes(col = row, shape = col, alpha = !is.out), size = 3)} else
       p = p + geom_point(aes(col = row, shape = col), size = 3) 
-
-  p = p + ggtitle(cc) + theme_bw()
   
+  p = p + ggtitle(cc) + theme_bw(base_size = 14) + labs(x = "Time")
+  p = p + scale_color_ptol()
   p
 }
+
+sh_volcano = function(PT, bio = "MEi"){
+  if(all( is.na(pt[id == bio, pv] )))
+    stop("All pvalues are NAs, possibly due to low between plate replicates.")
+
+  g = ggplot(pt[id == bio], aes(exp(Estimate), -log10(pv), label = Fibroblast_id)) + geom_point() +
+    geom_hline(yintercept = -log10(.05), linetype = "dashed", color = "firebrick") +
+    theme_bw(base_size = 14) + ggtitle(bio)
+  g
+}
+

@@ -1,4 +1,5 @@
 # Different useful ggplot functions
+library(ggthemes)
 
 give.n <- function(x, mult = 1.02){
   return(c(y = median(x) * mult, label = length(x))) 

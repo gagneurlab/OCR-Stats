@@ -1,22 +1,36 @@
 ### Function that fits OCR using linear regression.
 
 fit_function = function(DT = dt, Method = "LR", Out_co = 5, Out_cop = 7,
-                        group1 = "cell_culture", group2 = "Fibroblast_id", offset = NULL){
+                        group1 = "cell_culture", group2 = "Fibroblast_id", offset = NULL, y = "OCR"){
   
-  # To use normalized OCR, use LR_n
-  if(! Method %in% c("LR", "RR", "LR_ao", "LR_n") )
-    stop("Method unavailable. Available methods: LR, RR, LR_ao, LR_n")
+  DT <- copy(DT)
   
-  DT = copy(DT)
+  # Check columns
+  necessary_cols <- c("plate_id", group1, group2, "well", "time", y, "Interval")
+  if(! all(necessary_cols %in% names(DT))){
+    stop(paste0("The following columns have to be in DT: ", paste(necessary_cols, collapse = ", ")))
+  }
   
-  if(is.null(DT$lOCR_n) & ! is.null(DT$OCR_n))  DT[, lOCR_n := log(OCR_n)]
-  if(is.null(DT$lOCR))  DT[, lOCR := log(OCR)]
+  # Check methods
+  if(! Method %in% c("LR", "RR", "LR_ao") )
+    stop("Method unavailable. Available methods: LR, RR, LR_ao")
+  
+  # Check y
+  if(! y %in% c("OCR", "ECAR", "lOCR", "lECAR") )
+    stop("Response variable unavailable. Available y: OCR, ECAR")
+  
+  if(y %in% c("OCR", "lOCR"))
+    if(is.null(DT$lOCR))  DT[, lOCR := log(OCR)]
+  
+  if(y %in% c("ECAR", "lECAR"))
+    if(is.null(DT$lECAR))  DT[, lECAR := log(ECAR)]
   
   if(Method == "LR_ao") DT = DT[is.out == F]
   
-  if(Method == "LR_n"){
-    setnames(DT, "lOCR_n", "x") } else
-      setnames(DT, "lOCR", "x")
+  if(y %in% c("OCR", "lOCR")){
+    setnames(DT, "lOCR", "x")
+    } else if (y %in% c("ECAR", "lECAR"))
+      setnames(DT, "lECAR", "x")
   
   coef_res = NULL  # contains the coefficients and pvalues
   DF = NULL    # contains the fitted values
@@ -28,8 +42,7 @@ fit_function = function(DT = dt, Method = "LR", Out_co = 5, Out_cop = 7,
     df = na.omit(df)
     
     if(nrow(df) > 2 ){
-      if(Method %in% c("LR", "LR_ao", "LR_n")){   # Linear Regression
-        
+      if(Method %in% c("LR", "LR_ao")){   # Linear Regression
         if(is.null(offset)){
           if(length(unique(df$well)) == 1){# There may be only 1 well (replicate)
             fit = lm(x ~ -1 + Interval, data = df) } else
@@ -61,8 +74,9 @@ fit_function = function(DT = dt, Method = "LR", Out_co = 5, Out_cop = 7,
     }
     
     coef_res = rbind(sdt, coef_res, fill = T)   # contains the coefficients and pvalues
-    DF = rbind(df, DF, fill = T) # contains the fitted values
-  } # closes the for
+    DF = rbind(df, DF, fill = T) # contains the fitted values and residuals
+  } # closes the for loop
+  
   coef_res$method = Method
   DF$method = Method
   DF[, e_fitted := exp(fitted)]
@@ -77,7 +91,7 @@ fit_function = function(DT = dt, Method = "LR", Out_co = 5, Out_cop = 7,
   DF[, mad_sqE := mad(sqE, na.rm=T), by = .(get(group1), Interval)]
   DF[, is.out := median_sqE + Out_cop * mad_sqE < sqE]
   DF[, sd_res := sd(x - lInt_fit)]
-  setkeyv(DF, c(group1, "well"))
+  setorderv(DF, c(group1, "well"))
   
   # Add plate_id
   DF = right_join(unique(DT[, c("plate_id", group1), with = F], by=NULL), DF, by = group1) %>% as.data.table

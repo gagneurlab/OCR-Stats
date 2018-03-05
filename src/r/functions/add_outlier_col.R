@@ -1,12 +1,17 @@
 ### Adds 2 outliers columns:
 # is.outw = T/F depending if the sample is an outlier at the well level (and NAs)
 # is.out = T/F depending if the sample is an outlier at the single point level (and well level)
+## Input:
+# DT: table with OCR measurements. Needs the following columns: OCR, time, well, group1, group2
+# Out_co: number of median absolute deviations from the median a well point is allowed to be in order not to be outlier
+# Out_cop: number of median absolute deviations from the median a single point is allowed to be in order not to be outlier
+
 # author: vyepez
 
 add_outlier_col = function(DT, Out_co = 5, Out_cop = 7, group1 = "cell_culture", group2 = "Fibroblast_id"){
   
-  # Outlier extra info must have already been added
   DP = copy(DT)
+  # Add outlier info if not present
   if(!"is.outw" %in% colnames(DP)) DP[, is.outw := F]
   if(!"is.out" %in% colnames(DP)) DP[, is.out := F]
     
@@ -31,7 +36,8 @@ add_outlier_col = function(DT, Out_co = 5, Out_cop = 7, group1 = "cell_culture",
   }
   DP[, aux := NULL]
   
-  print(sum(n_outw) / (sum(x_lr_ao_fitted[time == 1, .N, by = get(group1)]$N)+sum(n_outw)) )
+  p = sum(n_outw) / (sum(x_lr_ao_fitted[time == 1, .N, by = get(group1)]$N)+sum(n_outw))
+  print(paste0(round(p*100, 2), "% well outliers found in total."))
   
   ### Detect outliers at single point level
   DP[, is.out := is.outw]
@@ -56,7 +62,8 @@ add_outlier_col = function(DT, Out_co = 5, Out_cop = 7, group1 = "cell_culture",
   }
   DP[, aux := NULL]
   
-  print(sum(n_out) / (nrow(x_lr_ao_fitted) + sum(n_out)) )
+  p = sum(n_out) / (nrow(x_lr_ao_fitted) + sum(n_out))
+  print(paste0(round(p*100, 2), "% single point outliers found in total."))
   
   return(DP)
 }
