@@ -7,7 +7,7 @@
 # for each bionergetic provided in vars
 
 
-stat_test_OCR <- function(bio_dt, comp_dt, vars = c("EI", "AI", "EAi", "MI", "MEi")){
+stat_test_OCR <- function(bio_dt, comp_dt, vars = c("EI", "AI", "EAi", "MI", "MEi", "lInt3")){
   
   # comp_dt must have 2 columns only
   if(ncol(comp_dt) != 2)
