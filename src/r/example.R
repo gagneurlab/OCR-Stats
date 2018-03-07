@@ -3,7 +3,6 @@ source('src/r/config.R')
 
 # Read example data
 dt <- fread("data/table_s4_all_OCR.txt")
-setnames(dt, "Cell_line", "Fibroblast_id")
 
 # Find outliers
 dt_ao <- add_outlier_col(dt)
@@ -42,4 +41,8 @@ outlier_plot(dt_ao, cc)
 # 3. Statistical Testing volcano plot
 g = sh_volcano(pt, bio = "MEi")
 # Print it using ggplotly and scroll through the dots to see the samples' names
-ggplotly(g) 
+ggplotly(g)
+
+# 4. Scatterplot 2 different bioenergetics
+g2 <- scatterplot_bios(pt, "EI", "MEi")
+ggplotly(g2)
