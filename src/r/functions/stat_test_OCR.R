@@ -58,6 +58,8 @@ stat_test_OCR <- function(bio_dt, comp_dt, vars = c("EI", "AI", "EAi", "MI", "ME
   names(l2) = vars
   pv_dt = rbindlist(l2, idcol = "id")
   
+  pv_dt[, Estimate := exp(Estimate)]
+  
   return(pv_dt)
 }
 

@@ -17,8 +17,8 @@ scatterplot_bios <- function(PT, bio1, bio2, alpha = .05){
   pt_cast[get(paste0("pv_", bio1)) < alpha &
             get(paste0("pv_", bio2)) < alpha, Signif := "Both"]
   
-  g <- ggplot(pt_cast, aes(exp(get(paste0("Estimate_", bio1))),
-                           exp(get(paste0("Estimate_", bio2))), 
+  g <- ggplot(pt_cast, aes(get(paste0("Estimate_", bio1)),
+                           get(paste0("Estimate_", bio2)), 
                            label = Fibroblast_id)) +
     geom_point(aes(col = Signif)) + 
     theme_bw() + scale_color_ptol() +

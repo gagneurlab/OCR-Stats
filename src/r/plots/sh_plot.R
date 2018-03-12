@@ -1,28 +1,32 @@
 source('src/r/plots/ggplot_functions.R')
 
-sh_plot <- function(plot_dt, add_title = TRUE, see_out = FALSE, y = "OCR", group = "Fibroblast_id", geom = "point"){
+sh_plot <- function(plot_dt, add_title = TRUE, see_out = FALSE, 
+                    y = "OCR", group = "Fibroblast_id", geom = "point"){
   
-  # Other option for geom: box or line
-  if(geom == "line") group <- "well"
+  # Check geoms
+  if(! geom %in% c("point", "box", "boxplot") )
+    stop("Geom unavailable. Available geoms: point, box or boxplot")
+  if(geom == "boxplot") geom = "box"
   
   pt <- if.else("cell_culture" %in% names(plot_dt), plot_dt[!is.na(cell_culture)],
                 plot_dt)
   
   # Create ggobject
   if(geom == "point"){
-    g = ggplot(pt, aes(factor(time), get(y)))} else if(geom == "box"){
-      g = ggplot(pt[is.out == F], aes(factor(time), get(y))) } else if(geom == "line"){
-        g = ggplot(pt[is.out == F], aes(factor(time), get(y), group = well)) }
+    g = ggplot(pt, aes(factor(time), get(y)))
+    } else if(geom == "box"){
+      g = ggplot(pt[is.out == F], aes(factor(time), get(y))) 
+      } 
   
   # Add the geom
   if(geom == "point"){
     if(see_out == T){
-      g = g + geom_point(aes(color = get(group), alpha = !is.out))} else
+      g = g + geom_point(aes(color = get(group), alpha = !is.out))
+      } else
         g = g + geom_point(aes(color = get(group)))
   }else if(geom == "box"){
     g = g + geom_boxplot(aes(color = get(group)))
-  } else if(geom == "line")
-    g = g + geom_line(aes(color = get(group))) + geom_point(aes(color = get(group)))
+  } 
   
   g = g + labs(x = "Time", y = y)
   
@@ -85,7 +89,7 @@ sh_volcano = function(PT, bio = "MEi"){
   if(all( is.na(pt[id == bio, pv] )))
     stop("All pvalues are NAs, possibly due to low between plate replicates.")
 
-  g = ggplot(pt[id == bio], aes(exp(Estimate), -log10(pv), label = Fibroblast_id)) + geom_point() +
+  g = ggplot(pt[id == bio], aes(Estimate, -log10(pv), label = Fibroblast_id)) + geom_point() +
     geom_hline(yintercept = -log10(.05), linetype = "dashed", color = "firebrick") +
     theme_bw(base_size = 14) + ggtitle(bio)
   g

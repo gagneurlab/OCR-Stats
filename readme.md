@@ -38,7 +38,8 @@ All data located in `data/`.
 - `stat_test_OCR()`: compares the bioenergetics of 2 samples providing an estimate with the difference and pvalue.
 - `sh_plot()`: plots a whole Seahorse experiment, differentiating samples by color. Can produce points, boxplots or violin plots. Returns a ggplot object that can be further edited.
 - `outlier_plot()`: plots a single sample, highlighting outlier status. Returns a ggplot object that can be further edited.
-- `sh_volcano()`: makes a volcano plot, where the x axis is the bioenergetic difference (exponentiated) and the y-axis the -log10 of the pvalue. Samples above the horizontal dotted line are significant.
+- `sh_volcano()`: makes a volcano plot, where the x axis is the bioenergetic difference and the y-axis the -log10 of the pvalue. Samples above the horizontal dotted line are significant.
+- `scatterplot_bios()`: makes a scatterplot of 2 different bioenergetic differences.
 
 
 ## Support

@@ -7,9 +7,8 @@ fit_function = function(DT = dt, Method = "LR", Out_co = 5, Out_cop = 7,
   
   # Check columns
   necessary_cols <- c("plate_id", group1, group2, "well", "time", y, "Interval")
-  if(! all(necessary_cols %in% names(DT))){
+  if(! all(necessary_cols %in% names(DT)))
     stop(paste0("The following columns have to be in DT: ", paste(necessary_cols, collapse = ", ")))
-  }
   
   # Check methods
   if(! Method %in% c("LR", "RR", "LR_ao") )
