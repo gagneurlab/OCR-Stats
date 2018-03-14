@@ -7,7 +7,7 @@
 # for each bionergetic provided in vars
 
 
-stat_test_OCR <- function(bio_dt, comp_dt, vars = c("EI", "AI", "EAi", "MI", "MEi")){
+stat_test_OCR <- function(bio_dt, comp_dt, vars = c("EI", "AI", "EAi", "MI", "MEi", "lInt3")){
   
   # comp_dt must have 2 columns only
   if(ncol(comp_dt) != 2)
@@ -57,6 +57,8 @@ stat_test_OCR <- function(bio_dt, comp_dt, vars = c("EI", "AI", "EAi", "MI", "ME
   })
   names(l2) = vars
   pv_dt = rbindlist(l2, idcol = "id")
+  
+  pv_dt[, Estimate := exp(Estimate)]
   
   return(pv_dt)
 }
