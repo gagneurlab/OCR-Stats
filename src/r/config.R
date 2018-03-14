@@ -11,7 +11,6 @@ library(tidyr)
 
 # Different functions needed
 source('src/r/functions/compute_bioenergetics.R')
-source('src/r/functions/useful_functions_seahorse.R')
 source('src/r/functions/useful_functions.R')
 source('src/r/functions/add_outlier_col.R')
 source('src/r/functions/stat_test_OCR.R')
