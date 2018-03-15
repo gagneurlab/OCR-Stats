@@ -24,8 +24,8 @@ Go through the `example.R` which should give a direct idea of the functions and 
 
 There are 2 folders:
 
-- functions: contains different functions needed for the statistical OCR-stats methods
-- plots: contains different plot functions using `ggplot`
+- functions: contains different functions needed for the statistical OCR-stats methods.
+- plots: contains different plot functions. They are all created using `ggplot`, therefore they can be saved and edited.
 
 R should be started from the repository root.
 
@@ -35,10 +35,11 @@ All data located in `data/`.
 
 - `add_outlier_col()`: adds 2 T/F columns (is.outw and is.out) to the given dataset indicating if the OCR value is a well level or single point outlier.
 - `compute_bionergetics()`: computes all four OCR interval levels in natural and log scales. Also provides bioenergetics in the natural scale (eg. maximal respiration) and in the log scale (eg. M/Ei ratio)
-- `stat_test_OCR()`: compares the bioenergetics of 2 samples providing an estimate with the difference and pvalue.
+- `stat_test_OCR()`: compares the bioenergetics of 2 samples providing an estimate with the difference and pvalue. Returns a list with 2 objects: dif_dt: for each pair of samples to be compared, gives the bioenergetics of each of them, and the respective difference; pv_dt: for each sample, returns one between-plates replicates aggregated difference wrt to a control and a pvalue.
 - `sh_plot()`: plots a whole Seahorse experiment, differentiating samples by color. Can produce points, boxplots or violin plots. Returns a ggplot object that can be further edited.
 - `outlier_plot()`: plots a single sample, highlighting outlier status. Returns a ggplot object that can be further edited.
-- `sh_volcano()`: makes a volcano plot, where the x axis is the bioenergetic difference and the y-axis the -log10 of the pvalue. Samples above the horizontal dotted line are significant.
+- `plot_bios()`: plots the specified bioenergetics difference wrt to a control of all samples.
+- `sh_volcano()`: makes a volcano plot, where the x axis is the bioenergetic difference wrt to a control and the y-axis the -log10 of the pvalue. Samples above the horizontal dotted line are significant.
 - `scatterplot_bios()`: makes a scatterplot of 2 different bioenergetic differences.
 
 

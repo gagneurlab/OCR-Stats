@@ -1,9 +1,34 @@
-# Scatterplots different bioenergetics and color codes the significance
+## Different plots after computing bioenergetics
 # author: vyepez
 
+
+plot_bios <- function(DIF_DT, bio = "MEi"){
+  if(! bio %in% DIF_DT[, id])
+    stop("Bio does not exist in table.")
+  
+  g = ggplot(DIF_DT[id == bio], aes(Estimate, Fibroblast_id, label = s1)) + 
+    geom_point() + theme_bw(base_size = 14) + geom_vline(xintercept = 1) + 
+    labs(y = "Sample id") + ggtitle(bio)
+  
+  g
+}
+
+
+sh_volcano = function(PT, bio = "MEi"){
+  if(all( is.na(PT[id == bio, pv] )))
+    stop("All pvalues are NAs, possibly due to low between plate replicates.")
+  
+  g = ggplot(PT[id == bio], aes(Estimate, -log10(pv), label = Fibroblast_id)) + geom_point() +
+    geom_hline(yintercept = -log10(.05), linetype = "dashed", color = "firebrick") +
+    theme_bw(base_size = 14) + ggtitle(bio)
+  g
+}
+
+
+# Scatterplots different bioenergetics and color codes the significance
 scatterplot_bios <- function(PT, bio1, bio2, alpha = .05){
   
-  if(! all(c(bio1, bio2) %in% pt$id))
+  if(! all(c(bio1, bio2) %in% PT$id))
     stop("Either ", bio1, " or ", bio2, " not present in table.")
   
   # Cast the table to have estimates and pvalues in columns
@@ -21,7 +46,8 @@ scatterplot_bios <- function(PT, bio1, bio2, alpha = .05){
                            get(paste0("Estimate_", bio2)), 
                            label = Fibroblast_id)) +
     geom_point(aes(col = Signif)) + 
-    theme_bw() + scale_color_ptol() +
+    theme_bw() + 
+    scale_color_manual(values = c("firebrick", "forestgreen", "dodgerblue", "gray")) +
     labs(x = bio1, y = bio2) +  
     geom_hline(yintercept = 1) + geom_vline(xintercept = 1) 
   g

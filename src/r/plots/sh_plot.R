@@ -85,13 +85,3 @@ outlier_plot = function(DT, cc, add_out = T, group = "cell_culture"){
   p
 }
 
-sh_volcano = function(PT, bio = "MEi"){
-  if(all( is.na(pt[id == bio, pv] )))
-    stop("All pvalues are NAs, possibly due to low between plate replicates.")
-
-  g = ggplot(pt[id == bio], aes(Estimate, -log10(pv), label = Fibroblast_id)) + geom_point() +
-    geom_hline(yintercept = -log10(.05), linetype = "dashed", color = "firebrick") +
-    theme_bw(base_size = 14) + ggtitle(bio)
-  g
-}
-

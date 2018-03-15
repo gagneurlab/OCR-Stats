@@ -35,6 +35,7 @@ stat_test_OCR <- function(bio_dt, comp_dt, vars = c("EI", "AI", "EAi", "MI", "ME
   })
   names(l) = vars
   dif_dt = rbindlist(l, idcol = "id")
+  dif_dt[, Estimate := exp(dif)]
   
   l2 <- lapply(vars, function(var){
     fit = lm(dif ~ 0 + Fibroblast_id, data = dif_dt[id == var])
@@ -60,7 +61,7 @@ stat_test_OCR <- function(bio_dt, comp_dt, vars = c("EI", "AI", "EAi", "MI", "ME
   
   pv_dt[, Estimate := exp(Estimate)]
   
-  return(pv_dt)
+  return(list(dif_dt = dif_dt, pv_dt = pv_dt))
 }
 
 

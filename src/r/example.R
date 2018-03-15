@@ -14,7 +14,9 @@ bio_dt <- compute_bioenergetics(dt_ao, methods = "LR_ao")
 comp_dt <- create_comp_table(dt_ao)
 
 # Perform statistical testing between samples
-pt <- stat_test_OCR(bio_dt, comp_dt)
+bio_list <- stat_test_OCR(bio_dt, comp_dt)
+dif_dt <- bio_list$dif_dt
+pv_dt <- bio_list$pv_dt
 
 # Doesn't have enough replicates across plates to compute pvalues
 pt <- stat_test_OCR(bio_dt, data.table(s1 = c("62343_20140128_1817", "Fibro_VY_083_20140128_1817"), 
@@ -37,12 +39,15 @@ dt_ao = separate(dt_ao, well, into = c("row", "col"), sep = 1, remove = F)
 cc = unique(dt_ao$cell_culture)[15]
 outlier_plot(dt_ao, cc)
 
+# 3. Plot the bioenergetics per sample
+g1 = plot_bios(dif_dt, bio = "MEi")
+ggplotly(g1)
 
-# 3. Statistical Testing volcano plot
-g = sh_volcano(pt, bio = "MEi")
+# 4. Statistical Testing volcano plot
+g2 = sh_volcano(pv_dt, bio = "MEi")
 # Print it using ggplotly and scroll through the dots to see the samples' names
-ggplotly(g)
+ggplotly(g3)
 
-# 4. Scatterplot 2 different bioenergetics
-g2 <- scatterplot_bios(pt, "EI", "MEi")
-ggplotly(g2)
+# 5. Scatterplot 2 different bioenergetics
+g3 <- scatterplot_bios(pv_dt, "EI", "MEi")
+ggplotly(g3)
