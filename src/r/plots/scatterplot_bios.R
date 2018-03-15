@@ -2,13 +2,27 @@
 # author: vyepez
 
 
-plot_bios <- function(DIF_DT, bio = "MEi"){
+plot_bios <- function(DIF_DT, PT, bio = "MEi"){
   if(! bio %in% DIF_DT[, id])
     stop("Bio does not exist in table.")
+  DIF_DT = DIF_DT[id == bio]
+  PT = PT[id == bio]
   
-  g = ggplot(DIF_DT[id == bio], aes(Estimate, Fibroblast_id, label = s1)) + 
-    geom_point() + theme_bw(base_size = 14) + geom_vline(xintercept = 1) + 
-    labs(y = "Sample id") + ggtitle(bio)
+  tt = merge(DIF_DT[, .(id, s1, s2, Fibroblast_id, Estimate)], PT[,  .(Fibroblast_id, id, Estimate, pv)],
+             by = c("Fibroblast_id", "id"), all.x = T)
+  tt[, signif := pv < .05]
+  
+  # If all pvalues are NAs, plot estimate only
+  if(all(is.na(tt$pv))){
+    g = ggplot(tt2, aes(Estimate, Fibroblast_id, label = s1)) + 
+      geom_point() } else{
+      g = ggplot(tt2, aes(Estimate.x, reorder(Fibroblast_id, pv), label = s1)) + 
+        geom_point(aes(col = signif)) + scale_colour_manual(values = c("black", "firebrick"))
+    }
+  
+  g = g + theme_bw(base_size = 14) + geom_vline(xintercept = 1) + 
+    scale_x_continuous(trans = 'log2') +
+    labs(x = "Estimate", y = "Sample id") + ggtitle(bio)
   
   g
 }

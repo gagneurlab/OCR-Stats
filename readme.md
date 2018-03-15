@@ -38,7 +38,7 @@ All data located in `data/`.
 - `stat_test_OCR()`: compares the bioenergetics of 2 samples providing an estimate with the difference and pvalue. Returns a list with 2 objects: dif_dt: for each pair of samples to be compared, gives the bioenergetics of each of them, and the respective difference; pv_dt: for each sample, returns one between-plates replicates aggregated difference wrt to a control and a pvalue.
 - `sh_plot()`: plots a whole Seahorse experiment, differentiating samples by color. Can produce points, boxplots or violin plots. Returns a ggplot object that can be further edited.
 - `outlier_plot()`: plots a single sample, highlighting outlier status. Returns a ggplot object that can be further edited.
-- `plot_bios()`: plots the specified bioenergetics difference wrt to a control of all samples.
+- `plot_bios()`: plots the specified bioenergetics difference wrt to a control of all samples. Marks as red significant samples.
 - `sh_volcano()`: makes a volcano plot, where the x axis is the bioenergetic difference wrt to a control and the y-axis the -log10 of the pvalue. Samples above the horizontal dotted line are significant.
 - `scatterplot_bios()`: makes a scatterplot of 2 different bioenergetic differences.
 
