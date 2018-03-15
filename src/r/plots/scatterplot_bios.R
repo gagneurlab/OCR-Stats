@@ -14,9 +14,9 @@ plot_bios <- function(DIF_DT, PT, bio = "MEi"){
   
   # If all pvalues are NAs, plot estimate only
   if(all(is.na(tt$pv))){
-    g = ggplot(tt2, aes(Estimate, Fibroblast_id, label = s1)) + 
+    g = ggplot(tt, aes(Estimate, Fibroblast_id, label = s1)) + 
       geom_point() } else{
-      g = ggplot(tt2, aes(Estimate.x, reorder(Fibroblast_id, pv), label = s1)) + 
+      g = ggplot(tt, aes(Estimate.x, reorder(Fibroblast_id, pv), label = s1)) + 
         geom_point(aes(col = signif)) + scale_colour_manual(values = c("black", "firebrick"))
     }
   
@@ -34,6 +34,7 @@ sh_volcano = function(PT, bio = "MEi"){
   
   g = ggplot(PT[id == bio], aes(Estimate, -log10(pv), label = Fibroblast_id)) + geom_point() +
     geom_hline(yintercept = -log10(.05), linetype = "dashed", color = "firebrick") +
+    scale_x_continuous(trans = 'log2') +
     theme_bw(base_size = 14) + ggtitle(bio)
   g
 }
