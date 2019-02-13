@@ -1,7 +1,7 @@
 source('src/r/plots/ggplot_functions.R')
 
 sh_plot <- function(plot_dt, add_title = TRUE, see_out = FALSE, 
-                    y = "OCR", group = "Fibroblast_id", geom = "point"){
+                    y = "OCR", group = "Fibroblast_id", geom = "point", scale = "ptol"){
   
   # Check geoms
   if(! geom %in% c("point", "box", "boxplot") )
@@ -35,7 +35,8 @@ sh_plot <- function(plot_dt, add_title = TRUE, see_out = FALSE,
   
   g = g + theme_bw(base_size = 14)
   
-  g = g + scale_color_ptol(name = group)  # name attribute gives name to legend
+  if(scale == 'ptol')
+    g = g + scale_color_ptol(name = group)  # name attribute gives name to legend
   g
 }
 
@@ -70,17 +71,17 @@ bio_plot <- function(bio_dt, bio = "max_respiration", Method="LR_ao", group = "F
 # bio_plot(w_bio_dt[plate_id == pi], geom = "violin", fill = "cornflowerblue")
 
 ## Plot to display outlier status with alpha
-outlier_plot = function(DT, cc, add_out = T, group = "cell_culture"){
+outlier_plot = function(DT, cc, add_out = T, group = "cell_culture", y = 'OCR'){
   plot_dt = DT[get(group) == cc & Interval != "Int5"]
   
-  p = ggplot(plot_dt, aes(x = time, y = OCR)) 
+  p = ggplot(plot_dt, aes(x = time, y = get(y))) 
   
   # If there are outliers and add_out == T, add alpha fill
   if(sum(plot_dt$is.out) != 0 & add_out == T){
     p = p + geom_point(aes(col = row, shape = col, alpha = !is.out), size = 3)} else
       p = p + geom_point(aes(col = row, shape = col), size = 3) 
   
-  p = p + ggtitle(cc) + theme_bw(base_size = 14) + labs(x = "Time")
+  p = p + ggtitle(cc) + theme_bw(base_size = 14) + labs(x = "Time", y = y)
   p = p + scale_color_ptol()
   p
 }

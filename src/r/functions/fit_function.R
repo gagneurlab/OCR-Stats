@@ -15,7 +15,7 @@ fit_function = function(DT = dt, Method = "LR", Out_co = 5, Out_cop = 7,
     stop("Method unavailable. Available methods: LR, RR, LR_ao")
   
   # Check y
-  if(! y %in% c("OCR", "ECAR", "lOCR", "lECAR") )
+  if(! y %in% c("OCR", "ECAR", "lOCR", "lECAR", "OCR_n") )
     stop("Response variable unavailable. Available y: OCR, ECAR")
   
   if(y %in% c("OCR", "lOCR"))
@@ -26,10 +26,13 @@ fit_function = function(DT = dt, Method = "LR", Out_co = 5, Out_cop = 7,
   
   if(Method == "LR_ao") DT = DT[is.out == F]
   
-  if(y %in% c("OCR", "lOCR")){
-    setnames(DT, "lOCR", "x")
-    } else if (y %in% c("ECAR", "lECAR"))
-      setnames(DT, "lECAR", "x")
+  var = ifelse(y %in% c("OCR", "lOCR"),
+               "lOCR", ifelse(y %in% c("ECAR", "lECAR"), "lECAR", "lOCR_n"))
+  setnames(DT, var, "x")
+  # if(y %in% c("OCR", "lOCR")){
+  #   setnames(DT, "lOCR", "x")
+  #  } else if (y %in% c("ECAR", "lECAR"))
+  #    setnames(DT, "lECAR", "x")
   
   coef_res = NULL  # contains the coefficients and pvalues
   DF = NULL    # contains the fitted values
