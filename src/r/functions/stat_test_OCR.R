@@ -70,8 +70,9 @@ stat_test_OCR <- function(bio_dt, comp_dt, vars = c("EI", "AI", "EAi", "MI", "ME
 ### Output:
 # Table with 2 columns (s1 and s2) of cell_cultures we are interested in comparing 
 
-create_comp_table <- function(DT, control = "NHDF"){
-  non_controls = unique(DT[Fibroblast_id != control, cell_culture])
+
+create_comp_table <- function(DT, control = c("NHDF")){
+  non_controls = unique(DT[! Fibroblast_id %in% control, cell_culture])
   comp_dt <- data.table(s1 = non_controls)
   comp_dt[, s2 := get_nhdf_from_cc(s1, DT), by = 1:nrow(comp_dt)]
   comp_dt[s2 == "NA", s2 := NA]
