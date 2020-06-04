@@ -40,7 +40,7 @@ cc = unique(dt_ao$cell_culture)[15]
 outlier_plot(dt_ao, cc)
 
 # 3. Plot the bioenergetics per sample
-g1 = plot_bios(dif_dt, bio = "MEi")
+g1 = plot_bios(dif_dt, pt, bio = "MEi")
 ggplotly(g1)
 
 # 4. Statistical Testing volcano plot
