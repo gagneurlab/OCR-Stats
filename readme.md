@@ -6,20 +6,18 @@ Manuscript in [Plos ONE](https://journals.plos.org/plosone/article?id=10.1371/jo
 
 ## Installing requirements
 ### R
-
-```{r}
-install.packages("data.table")
-install.packages("dplyr")
-install.packages("ggplot2")
-install.packages("ggthemes")
-install.packages("magrittr")
-install.packages("plotly")
-install.packages("tidyr")
-```
+Install the following R packages using `install.packages()`:
+* data.table
+* dplyr
+* ggplot2
+* ggthemes
+* magrittr
+* plotly
+* tidyr
 
 ## General repository organization notes
 
-Sourcing the `config.R` file loads all necessary functions and variables.
+Source the `config.R` file to load all necessary functions and variables.
 Go through the `example.R` which should give a direct idea of the functions and plots available.
 
 There are 2 folders:
@@ -45,4 +43,4 @@ All data located in `data/`.
 
 ## Support
 
-Let me know if you have any problems by creating an issue or sending me an email to yepez-at-in.tum.de.
+Let me know if you have any problems by creating an issue or sending an email to yepez-at-in.tum.de.
