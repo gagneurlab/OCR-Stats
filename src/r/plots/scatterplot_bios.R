@@ -8,7 +8,7 @@ plot_bios <- function(DIF_DT, PT, bio = "MEi"){
   DIF_DT = DIF_DT[id == bio]
   PT = PT[id == bio]
   
-  tt = merge(DIF_DT[, .(id, s1, s2, Fibroblast_id, Estimate)], PT[,  .(Fibroblast_id, id, Estimate, pv)],
+  tt = merge(DIF_DT[, .(id, s1, s2, Fibroblast_id, Estimate)], PT[,  .(Fibroblast_id, id, pv)],
              by = c("Fibroblast_id", "id"), all.x = T)
   tt[, signif := pv < .05]
   
