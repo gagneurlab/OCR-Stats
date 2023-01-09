@@ -40,13 +40,13 @@ cc = unique(dt_ao$cell_culture)[15]
 outlier_plot(dt_ao, cc)
 
 # 3. Plot the bioenergetics per sample
-g1 = plot_bios(dif_dt, pt, bio = "MEi")
+g1 = plot_bios(dif_dt, pt$pv_dt, bio = "MEi")
 ggplotly(g1)
 
 # 4. Statistical Testing volcano plot
 g2 = sh_volcano(pv_dt, bio = "MEi")
 # Print it using ggplotly and scroll through the dots to see the samples' names
-ggplotly(g3)
+ggplotly(g2)
 
 # 5. Scatterplot 2 different bioenergetics
 g3 <- scatterplot_bios(pv_dt, "EI", "MEi")
