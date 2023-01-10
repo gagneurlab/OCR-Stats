@@ -8,13 +8,13 @@ plot_bios <- function(DIF_DT, PT, bio = "MEi"){
   DIF_DT = DIF_DT[id == bio]
   PT = PT[id == bio]
   
-  tt = merge(DIF_DT[, .(id, s1, s2, Fibroblast_id, Estimate)], PT[,  .(Fibroblast_id, id, pv)],
+  tt = merge(DIF_DT[, .(id, s1, s2, Fibroblast_id, Estimate)], PT[,  .(Fibroblast_id, id, pv, Estimate)],
              by = c("Fibroblast_id", "id"), all.x = T)
   tt[, signif := pv < .05]
   
   # If all pvalues are NAs, plot estimate only
   if(all(is.na(tt$pv))){
-    g = ggplot(tt, aes(Estimate, Fibroblast_id, label = s1)) + 
+    g = ggplot(tt, aes(Estimate.x, Fibroblast_id, label = s1)) + 
       geom_point() } else{
       g = ggplot(tt, aes(Estimate.x, reorder(Fibroblast_id, pv), label = s1)) + 
         geom_point(aes(col = signif)) + scale_colour_manual(values = c("black", "firebrick"))
